@@ -1,0 +1,29 @@
+//В данном случаем применяется синтаксис "proto3". Если явным образом не указать версию, то по умолчанию будет использоваться более старая версия - proto2.
+syntax = "proto3";
+ 
+//пространство имен, которое будет использоваться с этим сервисом:
+//Если не указать эту настройку, то в качестве пространства имен будет использоваться название пакета в PascalCase.
+option csharp_namespace = "GrpcClientApp";
+ 
+//название пакета
+package Example;
+ 
+// сообщение от клиента содержит word
+message Request{
+    string word = 1;
+}
+
+// сообщение клиенту содержит word и translation
+message Response{
+    string word = 1;
+    string translation = 2;
+}
+ 
+// определение сервиса Translator
+service Translator {
+  // определение метода Translate, 
+  // который получает сообщение Request
+  // и отправляет сообщение Response
+                                           // унарный метод
+  rpc Translate (Request) returns (Response);
+}
