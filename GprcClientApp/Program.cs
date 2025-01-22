@@ -1,6 +1,8 @@
-﻿using Grpc.Core;
+﻿using Google.Protobuf;
+using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcClientApp;
+using GrpcServiceApp;
 
 namespace GprcClientApp
 {
@@ -47,27 +49,48 @@ namespace GprcClientApp
             #endregion
 
             #region Потоковая передача сервера
-            // создаем клиент
-            var client = new MessengerServerStream.MessengerServerStreamClient(channel);
+            //// создаем клиент
+            //var client = new MessengerServerStream.MessengerServerStreamClient(channel);
 
-            // посылаем пустое сообщение и получаем набор сообщений
-            var serverData = client.StreamingFromServer(new RequestServerStream());
+            //// посылаем пустое сообщение и получаем набор сообщений
+            //var serverData = client.StreamingFromServer(new RequestServerStream());
 
-            // получаем поток сервера
-            var responseStream = serverData.ResponseStream;
-            // с помощью итераторов извлекаем каждое сообщение из потока
-            while (await responseStream.MoveNext(new CancellationToken()))
-            {
-
-                ResponseServerStream response = responseStream.Current;
-                Console.WriteLine(response.Content);
-            }
-            // or
-            //await foreach (var response in responseStream.ReadAllAsync())
+            //// получаем поток сервера
+            //var responseStream = serverData.ResponseStream;
+            //// с помощью итераторов извлекаем каждое сообщение из потока
+            //while (await responseStream.MoveNext(new CancellationToken()))
             //{
+
+            //    ResponseServerStream response = responseStream.Current;
             //    Console.WriteLine(response.Content);
             //}
+            //// or
+            ////await foreach (var response in responseStream.ReadAllAsync())
+            ////{
+            ////    Console.WriteLine(response.Content);
+            ////}
 
+            #endregion
+
+            #region Потоковая передача клиента
+
+            // данные для отправки
+            string[] messages = { "Привет", "Как дела?", "Че молчишь?", "Ты че, спишь?", "Ну пока" };
+            // создаем клиент
+            var client = new MessengerClientStream.MessengerClientStreamClient(channel);
+
+            var call = client.StreamingFromClient();
+
+            // посылаем каждое сообщение
+            foreach (var message in messages)
+            {
+                await call.RequestStream.WriteAsync(new RequestClientStream { Content = message });
+            }
+            // завершаем отправку сообшений в потоке
+            await call.RequestStream.CompleteAsync();
+            // получаем ответ сервера
+            ResponseClientStream response = await call.ResponseAsync;
+            Console.WriteLine($"Ответ сервера: {response.Content}");
             #endregion
 
             Console.ReadKey();
