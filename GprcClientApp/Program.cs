@@ -2,7 +2,6 @@
 using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcClientApp;
-using GrpcServiceApp;
 
 namespace GprcClientApp
 {
