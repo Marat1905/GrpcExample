@@ -10,6 +10,7 @@
   <ItemGroup>
     <Protobuf Include="Protos\example.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\inviter.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\serverstream.proto" GrpcServices="Client" />
   </ItemGroup>
   
   <ItemGroup>

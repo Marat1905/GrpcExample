@@ -1,0 +1,24 @@
+//В данном случаем применяется синтаксис "proto3". Если явным образом не указать версию, то по умолчанию будет использоваться более старая версия - proto2.
+syntax = "proto3";
+
+//пространство имен, которое будет использоваться с этим сервисом:
+//Если не указать эту настройку, то в качестве пространства имен будет использоваться название пакета в PascalCase.
+option csharp_namespace = "GrpcClientApp";
+
+//название пакета
+package ServerStreamExample;
+
+
+// сообщение от клиента ничего содержит 
+message RequestServerStream{ }
+ 
+// сообщение клиенту содержит content
+message ResponseServerStream{
+    string content = 1;
+}
+ 
+// определение сервиса MessengerServerStream
+service MessengerServerStream{
+   // Потоковая передача сервера
+  rpc StreamingFromServer (RequestServerStream) returns (stream ResponseServerStream);
+}

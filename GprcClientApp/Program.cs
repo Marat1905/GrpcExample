@@ -1,4 +1,5 @@
-﻿using Grpc.Net.Client;
+﻿using Grpc.Core;
+using Grpc.Net.Client;
 using GrpcClientApp;
 
 namespace GprcClientApp
@@ -32,17 +33,41 @@ namespace GprcClientApp
 
 
             #region унарный метод передачи DataTime
-            // создаем клиент
-            var client = new Inviter.InviterClient(channel);
+            //// создаем клиент
+            //var client = new Inviter.InviterClient(channel);
 
-            // посылаем имя и получаем приглашение на мероприятие
-            var response = await client.inviteAsync(new RequestDate { Name = "Tom" });
-            var eventInvitation = response.Invitation;
-            var eventDateTime = response.Start.ToDateTime();
-            var eventDuration = response.Duration.ToTimeSpan();
-            // выводим данные на консоль
-            Console.WriteLine(eventInvitation);
-            Console.WriteLine($"Начало: {eventDateTime.ToString("dd.MM HH:mm")}   Длительность: {eventDuration.TotalHours} часа");
+            //// посылаем имя и получаем приглашение на мероприятие
+            //var response = await client.inviteAsync(new RequestDate { Name = "Tom" });
+            //var eventInvitation = response.Invitation;
+            //var eventDateTime = response.Start.ToDateTime();
+            //var eventDuration = response.Duration.ToTimeSpan();
+            //// выводим данные на консоль
+            //Console.WriteLine(eventInvitation);
+            //Console.WriteLine($"Начало: {eventDateTime.ToString("dd.MM HH:mm")}   Длительность: {eventDuration.TotalHours} часа");
+            #endregion
+
+            #region Потоковая передача сервера
+            // создаем клиент
+            var client = new MessengerServerStream.MessengerServerStreamClient(channel);
+
+            // посылаем пустое сообщение и получаем набор сообщений
+            var serverData = client.StreamingFromServer(new RequestServerStream());
+
+            // получаем поток сервера
+            var responseStream = serverData.ResponseStream;
+            // с помощью итераторов извлекаем каждое сообщение из потока
+            while (await responseStream.MoveNext(new CancellationToken()))
+            {
+
+                ResponseServerStream response = responseStream.Current;
+                Console.WriteLine(response.Content);
+            }
+            // or
+            //await foreach (var response in responseStream.ReadAllAsync())
+            //{
+            //    Console.WriteLine(response.Content);
+            //}
+
             #endregion
 
             Console.ReadKey();
