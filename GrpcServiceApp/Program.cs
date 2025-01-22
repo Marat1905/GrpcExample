@@ -15,6 +15,8 @@ namespace GrpcServiceApp
 
             // встраиваем TranslatorService в обработку запроса
             app.MapGrpcService<TranslatorService>();
+            // встраиваем InviterService в обработку запроса
+            app.MapGrpcService<InviterService>();
             app.MapGet("/", () => "Hello World!");
 
             app.Run();

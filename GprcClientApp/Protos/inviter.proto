@@ -1,0 +1,34 @@
+//В данном случаем применяется синтаксис "proto3". Если явным образом не указать версию, то по умолчанию будет использоваться более старая версия - proto2.
+syntax = "proto3";
+
+//пространство имен, которое будет использоваться с этим сервисом:
+//Если не указать эту настройку, то в качестве пространства имен будет использоваться название пакета в PascalCase.
+option csharp_namespace = "GrpcClientApp";
+
+// импортируем нужные пакеты
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+//название пакета
+package DateTimeExample;
+
+// сообщение от клиента содержит word
+message RequestDate {
+	string name =1;
+}
+
+// сообщение клиенту содержит invitation , start и duration
+message ResponseDate {
+	string invitation = 1;
+	google.protobuf.Timestamp start =2;
+	google.protobuf.Duration duration = 3;
+}
+
+// определение сервиса Inviter
+service Inviter {
+  // определение метода invite, 
+  // который получает сообщение RequestDate
+  // и отправляет сообщение Responsedate
+	rpc invite (RequestDate) returns (ResponseDate);
+}
+
