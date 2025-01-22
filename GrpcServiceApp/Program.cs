@@ -25,6 +25,9 @@ namespace GrpcServiceApp
             // встраиваем MessengerClientStreamService в обработку запроса
             app.MapGrpcService<MessengerClientStreamService>();
 
+            // встраиваем MessengerStreamBothWaysService в обработку запроса
+            app.MapGrpcService<MessengerStreamBothWaysService>();
+
             app.MapGet("/", () => "Hello World!");
 
             app.Run();
