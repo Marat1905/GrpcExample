@@ -12,6 +12,7 @@
     <Protobuf Include="Protos\serverstream.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\clientstream.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\bothwaysstream.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\header.proto" GrpcServices="Server" />
   </ItemGroup>
   
   <ItemGroup>

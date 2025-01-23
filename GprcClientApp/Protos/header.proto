@@ -1,0 +1,25 @@
+//В данном случаем применяется синтаксис "proto3". Если явным образом не указать версию, то по умолчанию будет использоваться более старая версия - proto2.
+syntax = "proto3";
+
+//пространство имен, которое будет использоваться с этим сервисом:
+//Если не указать эту настройку, то в качестве пространства имен будет использоваться название пакета в PascalCase.
+option csharp_namespace = "GrpcClientApp";
+
+//название пакета
+package HeaderExample;
+
+// сообщение от клиента ничего содержит 
+message RequestHeader{}
+ 
+// сообщение клиенту содержит content
+message ResponseHeader{
+    string content = 1;
+}
+
+// определение сервиса MessengerHeader
+service MessengerHeader{
+
+   // Потоковая передача клиента
+   // унарный метод
+  rpc SendMessageHeader (RequestHeader) returns (ResponseHeader);
+}

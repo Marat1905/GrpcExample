@@ -95,29 +95,47 @@ namespace GprcClientApp
             #endregion
 
             #region Двунаправленняя потоковая передача
+            //// создаем клиент
+            //var client = new MessengerBothWaysStreaming.MessengerBothWaysStreamingClient(channel);
+
+            //// получаем объект AsyncDuplexStreamingCall
+            //var call = client.StreamingBothWays();
+
+            //var readTask = Task.Run(async () =>
+            //{
+            //    await foreach (var response in call.ResponseStream.ReadAllAsync())
+            //    {
+            //        Console.WriteLine($"Server: {response.Content}");
+            //    }
+            //});
+            //foreach (var message in messages)
+            //{
+            //    await call.RequestStream.WriteAsync(new RequestBothWay { Content = message });
+            //    Console.WriteLine(message);
+            //    await Task.Delay(2000);
+            //}
+
+            //// завершаем отправку сообщений на сервер
+            //await call.RequestStream.CompleteAsync();
+            //await readTask;
+            #endregion
+
+            #region Получение заголовков
             // создаем клиент
-            var client = new MessengerBothWaysStreaming.MessengerBothWaysStreamingClient(channel);
+            var client = new MessengerHeader.MessengerHeaderClient(channel);
 
-            // получаем объект AsyncDuplexStreamingCall
-            var call = client.StreamingBothWays();
+            // отправляем сообщение серверу
+            using var call = client.SendMessageHeaderAsync(new RequestHeader());
 
-            var readTask = Task.Run(async () =>
+            // получаем ответ
+            ResponseHeader response = await call.ResponseAsync;
+            Console.WriteLine($"Response: {response.Content}");
+            // получаем все заголовки и выводим их на консоль
+            var headers = await call.ResponseHeadersAsync;
+            foreach (var header in headers)
             {
-                await foreach (var response in call.ResponseStream.ReadAllAsync())
-                {
-                    Console.WriteLine($"Server: {response.Content}");
-                }
-            });
-            foreach (var message in messages)
-            {
-                await call.RequestStream.WriteAsync(new RequestBothWay { Content = message });
-                Console.WriteLine(message);
-                await Task.Delay(2000);
+                Console.WriteLine($"{header.Key}: {header.Value}");
             }
-
-            // завершаем отправку сообщений на сервер
-            await call.RequestStream.CompleteAsync();
-            await readTask;
             #endregion
 
             Console.ReadKey();
