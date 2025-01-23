@@ -13,10 +13,12 @@
     <Protobuf Include="Protos\clientstream.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\bothwaysstream.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\header.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\crud.proto" GrpcServices="Server" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
   </ItemGroup>
 
 </Project>

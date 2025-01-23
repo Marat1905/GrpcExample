@@ -1,0 +1,51 @@
+//В данном случаем применяется синтаксис "proto3". Если явным образом не указать версию, то по умолчанию будет использоваться более старая версия - proto2.
+syntax = "proto3";
+ 
+//пространство имен, которое будет использоваться с этим сервисом:
+//Если не указать эту настройку, то в качестве пространства имен будет использоваться название пакета в PascalCase.
+//option csharp_namespace = "GrpcServiceApp";
+
+//название пакета
+package crud_example;
+
+// импортируем нужные пакеты
+import "google/protobuf/empty.proto";
+
+service UserService{
+ 
+  rpc ListUsers(google.protobuf.Empty) returns (ListReply);
+  rpc GetUser(GetUserRequest) returns (UserReply);
+  rpc CreateUser(CreateUserRequest) returns (UserReply);
+  rpc UpdateUser(UpdateUserRequest) returns (UserReply);
+  rpc DeleteUser(DeleteUserRequest) returns (UserReply);
+}
+ 
+message CreateUserRequest{
+  string name=1;
+  int32 age = 2;
+}
+ 
+message GetUserRequest{
+  int32 id =1;
+}
+ 
+message UpdateUserRequest{
+  int32 id=1;
+  string name=2;
+  int32 age = 3;
+}
+ 
+message DeleteUserRequest{
+  int32 id =1;
+}
+ 
+message ListReply{
+	//Оператор repeated указывает, что это будет набор объектов типа UserReply.
+  repeated UserReply Users = 1;
+}
+ 
+message UserReply{
+  int32 id = 1;
+  string name=2;
+  int32 age = 3;
+}

@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using CrudExample;
+using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcClientApp;
@@ -121,20 +122,71 @@ namespace GprcClientApp
             #endregion
 
             #region Получение заголовков
+            //// создаем клиент
+            //var client = new MessengerHeader.MessengerHeaderClient(channel);
+
+            //// отправляем сообщение серверу
+            //using var call = client.SendMessageHeaderAsync(new RequestHeader());
+
+            //// получаем ответ
+            //ResponseHeader response = await call.ResponseAsync;
+            //Console.WriteLine($"Response: {response.Content}");
+            //// получаем все заголовки и выводим их на консоль
+            //var headers = await call.ResponseHeadersAsync;
+            //foreach (var header in headers)
+            //{
+            //    Console.WriteLine($"{header.Key}: {header.Value}");
+            //}
+            #endregion
+
+            #region CRUD
             // создаем клиент
-            var client = new MessengerHeader.MessengerHeaderClient(channel);
+            var client = new UserService.UserServiceClient(channel);
 
-            // отправляем сообщение серверу
-            using var call = client.SendMessageHeaderAsync(new RequestHeader());
+            //// получение списка объектов
+            //ListReply users = await client.ListUsersAsync(new Google.Protobuf.WellKnownTypes.Empty());
 
-            // получаем ответ
-            ResponseHeader response = await call.ResponseAsync;
-            Console.WriteLine($"Response: {response.Content}");
-            // получаем все заголовки и выводим их на консоль
-            var headers = await call.ResponseHeadersAsync;
-            foreach (var header in headers)
+            //foreach (var user in users.Users)
+            //{
+            //    Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
+            //}
+
+            //try
+            //{
+            //    // получение одного объекта по id = 2
+            //    UserReply user = await client.GetUserAsync(new GetUserRequest { Id = 2 });
+            //    Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
+            //}
+            //catch (RpcException ex)
+            //{
+            //    Console.WriteLine(ex.Status.Detail);    // получаем статус ответа
+            //}
+
+            //// добавление одного объекта
+            //UserReply user = await client.CreateUserAsync(new CreateUserRequest { Name = "Alice", Age = 32 });
+            //Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
+
+
+            //try
+            //{
+            //    //обновление одного объекта - изменим имя у объекта с id = 1 на Tomas
+            //    UserReply user = await client.UpdateUserAsync(new UpdateUserRequest { Id = 1, Name = "Tomas", Age = 38 });
+            //    Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
+            //}
+            //catch (RpcException ex)
+            //{
+            //    Console.WriteLine(ex.Status.Detail);
+            //}
+
+            try
             {
-                Console.WriteLine($"{header.Key}: {header.Value}");
+                // удаление объекта с id = 2
+                UserReply user = await client.DeleteUserAsync(new DeleteUserRequest { Id = 2 });
+                Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
+            }
+            catch (RpcException ex)
+            {
+                Console.WriteLine(ex.Status.Detail);
             }
             #endregion
 

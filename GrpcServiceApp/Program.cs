@@ -1,4 +1,5 @@
 using GrpcServiceApp.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace GrpcServiceApp
 {
@@ -7,6 +8,11 @@ namespace GrpcServiceApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // строка подключения
+            string connStr = "Server=(localdb)\\mssqllocaldb;Database=grpcdb;Trusted_Connection=True;";
+            // добавляем контекст ApplicationContext в качестве сервиса в приложение
+            builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connStr));
 
             // добавляем сервисы для работы с gRPC
             builder.Services.AddGrpc();
@@ -30,6 +36,9 @@ namespace GrpcServiceApp
 
             // встраиваем MessagerHeaderService в обработку запроса
             app.MapGrpcService<MessagerHeaderService>();
+
+            // встраиваем UserApiService в обработку запроса
+            app.MapGrpcService<UserApiService>();
 
             app.MapGet("/", () => "Hello World!");
 
