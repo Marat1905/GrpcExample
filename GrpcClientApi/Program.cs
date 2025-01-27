@@ -11,7 +11,7 @@ namespace GrpcClientApi
 
             builder.Services.AddGrpcClient<UserService.UserServiceClient>(o =>
             {
-                o.Address = new Uri("https://localhost:7142");
+                o.Address = new Uri("http://localhost:5129");
             });
 
             builder.Services.AddControllers();

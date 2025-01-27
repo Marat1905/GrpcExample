@@ -74,7 +74,7 @@ namespace GrpcClientApi.Controllers
         /// <response code="200">Новый пользователь успешно создан</response>
         /// <response code="400">Ошибка при создании нового пользователя</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType<UserModel>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] UserCreateModel model)
         {
@@ -82,7 +82,7 @@ namespace GrpcClientApi.Controllers
             UserReply user = await _client.CreateUserAsync(_mapper.Map<CreateUserRequest>(model));
 
             if (user != null)
-                return StatusCode(StatusCodes.Status200OK);
+                return StatusCode(StatusCodes.Status200OK, _mapper.Map<UserModel>(user));
             else
                 return StatusCode(StatusCodes.Status400BadRequest);
         }
@@ -107,7 +107,7 @@ namespace GrpcClientApi.Controllers
                 //обновление одного объекта - изменим имя у объекта с id = 1 на Tomas
                 UserReply user = await _client.UpdateUserAsync(_mapper.Map<UpdateUserRequest>(model));
                 if (user != null)
-                    return StatusCode(StatusCodes.Status200OK);
+                    return StatusCode(StatusCodes.Status200OK, _mapper.Map<UserModel>(user));
                 else
                     return StatusCode(StatusCodes.Status400BadRequest);
             }
@@ -139,7 +139,7 @@ namespace GrpcClientApi.Controllers
                 // удаление объекта с id = 2
                 UserReply user = await _client.DeleteUserAsync(new DeleteUserRequest { Id = id });
                 if (user != null)
-                    return StatusCode(StatusCodes.Status200OK);
+                    return StatusCode(StatusCodes.Status200OK, _mapper.Map<UserModel>(user));
                 else
                     return StatusCode(StatusCodes.Status400BadRequest);
             }
