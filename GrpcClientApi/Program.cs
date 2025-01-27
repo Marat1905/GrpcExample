@@ -7,6 +7,8 @@ namespace GrpcClientApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             builder.Services.AddGrpcClient<UserService.UserServiceClient>(o =>
             {
                 o.Address = new Uri("https://localhost:7142");

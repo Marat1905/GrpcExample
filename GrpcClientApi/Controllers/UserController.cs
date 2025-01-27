@@ -1,4 +1,5 @@
 ﻿
+using AutoMapper;
 using Grpc.Core;
 using GrpcClientApi.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ namespace GrpcClientApi.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly UserService.UserServiceClient _client;
+        private readonly IMapper _mapper;
 
-        public UserController(ILogger<UserController> logger, UserService.UserServiceClient client)
+        public UserController(ILogger<UserController> logger, UserService.UserServiceClient client, IMapper mapper)
         {
             _logger = logger;
             _client = client;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -29,12 +32,13 @@ namespace GrpcClientApi.Controllers
         /// </remarks>
         /// <response code="200">Получение списка пользователей</response>
         [HttpGet]
+        [ProducesResponseType<UserModel>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
             // получение списка объектов
-            ListReply users = await _client.ListUsersAsync(new Google.Protobuf.WellKnownTypes.Empty());
+            var users = await _client.ListUsersAsync(new Google.Protobuf.WellKnownTypes.Empty());
 
-            return Ok(users);
+            return StatusCode(StatusCodes.Status200OK, _mapper.Map<ICollection<UserModel>>(users.Users.ToList()));
         }
 
         /// <summary>
@@ -53,8 +57,7 @@ namespace GrpcClientApi.Controllers
             {
                 // получение одного объекта по id 
                 UserReply user = await _client.GetUserAsync(new GetUserRequest { Id = id });
-                Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
-                return StatusCode(StatusCodes.Status200OK, new UserModel() { Id = user.Id, Name = user.Name, Age = user.Age });
+                return StatusCode(StatusCodes.Status200OK, _mapper.Map<UserModel>(user));
             }
             catch (RpcException ex)
             {
@@ -75,9 +78,8 @@ namespace GrpcClientApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] UserCreateModel model)
         {
-            CreateUserRequest newUser = new CreateUserRequest() { Age = model.Age, Name = model.Name };
             // добавление одного объекта
-            UserReply user = await _client.CreateUserAsync(newUser);
+            UserReply user = await _client.CreateUserAsync(_mapper.Map<CreateUserRequest>(model));
 
             if (user != null)
                 return StatusCode(StatusCodes.Status200OK);
@@ -100,11 +102,10 @@ namespace GrpcClientApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update([FromBody] UserModel model)
         {
-            UpdateUserRequest updUser = new UpdateUserRequest() { Id = model.Id, Age = model.Age, Name = model.Name };
             try
             {
                 //обновление одного объекта - изменим имя у объекта с id = 1 на Tomas
-                UserReply user = await _client.UpdateUserAsync(updUser);
+                UserReply user = await _client.UpdateUserAsync(_mapper.Map<UpdateUserRequest>(model));
                 if (user != null)
                     return StatusCode(StatusCodes.Status200OK);
                 else
