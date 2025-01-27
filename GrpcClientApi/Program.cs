@@ -1,4 +1,3 @@
-using CrudExample;
 
 namespace GrpcClientApi
 {
@@ -10,7 +9,7 @@ namespace GrpcClientApi
 
             builder.Services.AddGrpcClient<UserService.UserServiceClient>(o =>
             {
-                o.Address = new Uri("https://localhost:7266");
+                o.Address = new Uri("https://localhost:7142");
             });
 
             builder.Services.AddControllers();

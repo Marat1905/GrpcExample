@@ -1,4 +1,4 @@
-﻿using CrudExample;
+﻿
 using Grpc.Core;
 using GrpcClientApi.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -54,12 +54,12 @@ namespace GrpcClientApi.Controllers
                 // получение одного объекта по id 
                 UserReply user = await _client.GetUserAsync(new GetUserRequest { Id = id });
                 Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
-                return StatusCode(StatusCodes.Status200OK, new UserModel() { Id = user.Id, Name=user.Name, Age = user.Age});
+                return StatusCode(StatusCodes.Status200OK, new UserModel() { Id = user.Id, Name = user.Name, Age = user.Age });
             }
             catch (RpcException ex)
             {
                 return StatusCode(StatusCodes.Status404NotFound, ex.Status.Detail);
-            }         
+            }
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace GrpcClientApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] UserCreateModel model)
         {
-            CreateUserRequest newUser = new CreateUserRequest() { Age = model.Age , Name = model.Name};
+            CreateUserRequest newUser = new CreateUserRequest() { Age = model.Age, Name = model.Name };
             // добавление одного объекта
             UserReply user = await _client.CreateUserAsync(newUser);
 
@@ -100,12 +100,12 @@ namespace GrpcClientApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update([FromBody] UserModel model)
         {
-            UpdateUserRequest updUser = new UpdateUserRequest() { Id=model.Id, Age = model.Age, Name = model.Name };
+            UpdateUserRequest updUser = new UpdateUserRequest() { Id = model.Id, Age = model.Age, Name = model.Name };
             try
             {
                 //обновление одного объекта - изменим имя у объекта с id = 1 на Tomas
                 UserReply user = await _client.UpdateUserAsync(updUser);
-                if(user!=null)
+                if (user != null)
                     return StatusCode(StatusCodes.Status200OK);
                 else
                     return StatusCode(StatusCodes.Status400BadRequest);

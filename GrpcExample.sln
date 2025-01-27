@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GprcClientApp", "GprcClient
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcClientApi", "GrpcClientApi\GrpcClientApi.csproj", "{79F55206-A55B-4B9D-AE7A-87930CFC7C9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcServerApp", "GrpcServerApp\GrpcServerApp.csproj", "{7B36C924-2F5A-4852-97B0-6CCF97696197}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{79F55206-A55B-4B9D-AE7A-87930CFC7C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79F55206-A55B-4B9D-AE7A-87930CFC7C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79F55206-A55B-4B9D-AE7A-87930CFC7C9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B36C924-2F5A-4852-97B0-6CCF97696197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B36C924-2F5A-4852-97B0-6CCF97696197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B36C924-2F5A-4852-97B0-6CCF97696197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B36C924-2F5A-4852-97B0-6CCF97696197}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
