@@ -15,10 +15,14 @@ namespace GrpcServerApp
             // строка подключения
             string connStr = "Server=(localdb)\\mssqllocaldb;Database=grpcdb;Trusted_Connection=True;";
             // добавляем контекст ApplicationContext в качестве сервиса в приложение
-            builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connStr));
+            builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connStr), ServiceLifetime.Singleton);
 
             // Add services to the container.
             builder.Services.AddGrpc();
+
+            builder.Services.AddSingleton<HostModel>(new HostModel());
+
+            builder.Services.AddHostedService<MyHostedService>();
 
             var app = builder.Build();
 
