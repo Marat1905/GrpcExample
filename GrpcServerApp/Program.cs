@@ -10,6 +10,8 @@ namespace GrpcServerApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             // строка подключения
             string connStr = "Server=(localdb)\\mssqllocaldb;Database=grpcdb;Trusted_Connection=True;";
             // добавляем контекст ApplicationContext в качестве сервиса в приложение
