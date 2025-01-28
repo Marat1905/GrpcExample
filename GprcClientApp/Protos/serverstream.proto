@@ -3,10 +3,10 @@ syntax = "proto3";
 
 //пространство имен, которое будет использоваться с этим сервисом:
 //Если не указать эту настройку, то в качестве пространства имен будет использоваться название пакета в PascalCase.
-option csharp_namespace = "GrpcClientApp";
+//option csharp_namespace = "GrpcClientApp";
 
 //название пакета
-package ServerStreamExample;
+package ServerStream;
 
 
 // сообщение от клиента ничего содержит 

@@ -16,6 +16,7 @@ namespace GrpcServerApp.Services
         }
         public async override Task StreamingFromServer(RequestServerStream request, IServerStreamWriter<ResponseServerStream> responseStream, ServerCallContext context)
         {
+
             while (!context.CancellationToken.IsCancellationRequested)
             {
                 await responseStream.WriteAsync(new ResponseServerStream { Content = _hostModel.Text });

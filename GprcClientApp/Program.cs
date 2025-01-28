@@ -3,6 +3,7 @@ using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Net.Client;
 using GrpcClientApp;
+using ServerStream;
 
 namespace GprcClientApp
 {
@@ -18,7 +19,8 @@ namespace GprcClientApp
 
             // создаем канал для обмена сообщениями с сервером
             // параметр - адрес сервера gRPC
-            using var channel = GrpcChannel.ForAddress("https://localhost:7266");
+            using var channel = GrpcChannel.ForAddress("http://localhost:5129");
+            Console.WriteLine("scsx");
 
             #region унарный метод передачи
             //// создаем клиент
@@ -52,26 +54,26 @@ namespace GprcClientApp
             #endregion
 
             #region Потоковая передача сервера
-            //// создаем клиент
-            //var client = new MessengerServerStream.MessengerServerStreamClient(channel);
+            // создаем клиент
+            var client = new MessengerServerStream.MessengerServerStreamClient(channel);
 
-            //// посылаем пустое сообщение и получаем набор сообщений
-            //var serverData = client.StreamingFromServer(new RequestServerStream());
+            // посылаем пустое сообщение и получаем набор сообщений
+            var serverData = client.StreamingFromServer(new RequestServerStream());
 
-            //// получаем поток сервера
-            //var responseStream = serverData.ResponseStream;
-            //// с помощью итераторов извлекаем каждое сообщение из потока
-            //while (await responseStream.MoveNext(new CancellationToken()))
+            // получаем поток сервера
+            var responseStream = serverData.ResponseStream;
+            // с помощью итераторов извлекаем каждое сообщение из потока
+            while (await responseStream.MoveNext(new CancellationToken()))
+            {
+
+                ResponseServerStream response = responseStream.Current;
+                Console.WriteLine(response.Content);
+            }
+            // or
+            //await foreach (var response in responseStream.ReadAllAsync())
             //{
-
-            //    ResponseServerStream response = responseStream.Current;
             //    Console.WriteLine(response.Content);
             //}
-            //// or
-            ////await foreach (var response in responseStream.ReadAllAsync())
-            ////{
-            ////    Console.WriteLine(response.Content);
-            ////}
 
             #endregion
 
@@ -141,7 +143,7 @@ namespace GprcClientApp
 
             #region CRUD
             // создаем клиент
-            var client = new UserService.UserServiceClient(channel);
+            //var client = new UserService.UserServiceClient(channel);
 
             //// получение списка объектов
             //ListReply users = await client.ListUsersAsync(new Google.Protobuf.WellKnownTypes.Empty());
@@ -178,16 +180,16 @@ namespace GprcClientApp
             //    Console.WriteLine(ex.Status.Detail);
             //}
 
-            try
-            {
-                // удаление объекта с id = 2
-                UserReply user = await client.DeleteUserAsync(new DeleteUserRequest { Id = 2 });
-                Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
-            }
-            catch (RpcException ex)
-            {
-                Console.WriteLine(ex.Status.Detail);
-            }
+            //try
+            //{
+            //    // удаление объекта с id = 2
+            //    UserReply user = await client.DeleteUserAsync(new DeleteUserRequest { Id = 2 });
+            //    Console.WriteLine($"{user.Id}. {user.Name} - {user.Age}");
+            //}
+            //catch (RpcException ex)
+            //{
+            //    Console.WriteLine(ex.Status.Detail);
+            //}
             #endregion
 
             Console.ReadKey();
