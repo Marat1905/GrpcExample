@@ -23,6 +23,7 @@ namespace GrpcServerApp
             builder.Services.AddSingleton<HostModel>(new HostModel());
 
             builder.Services.AddHostedService<MyHostedService>();
+            builder.Services.AddHostedService<TimerHostService>();
 
             var app = builder.Build();
 
