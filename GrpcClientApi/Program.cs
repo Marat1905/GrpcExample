@@ -1,4 +1,6 @@
 
+using GrpcClientApi.Hubs;
+
 namespace GrpcClientApi
 {
     public class Program
@@ -13,6 +15,8 @@ namespace GrpcClientApi
             {
                 o.Address = new Uri("http://localhost:5129");
             });
+
+            builder.Services.AddSignalR();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -31,7 +35,10 @@ namespace GrpcClientApi
                 //});
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
+            app.MapHub<RealTimeHub>("/real");   // ChatHub будет обрабатывать запросы по пути /real
 
             app.MapControllers();
 

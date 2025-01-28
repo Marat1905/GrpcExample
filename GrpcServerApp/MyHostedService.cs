@@ -27,7 +27,7 @@ namespace GrpcServerApp
                 try
                 {
                     Debug.WriteLine($"Запись {DateTime.Now}");
-                    _hostModel.Text = $"Запись {DateTime.Now}";
+                    //_hostModel.Text = $"Запись {DateTime.Now}";
                 }
                 catch (Exception ex)
                 {

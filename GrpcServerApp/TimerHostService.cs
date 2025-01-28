@@ -1,16 +1,16 @@
-﻿using Microsoft.Extensions.Hosting;
-
-namespace GrpcServerApp
+﻿namespace GrpcServerApp
 {
     public class TimerHostService : IHostedService, IDisposable
     {
         private int executionCount = 0;
         private readonly ILogger<TimerHostService> _logger;
+        private readonly HostModel _hostModel;
         private Timer? _timer = null;
 
-        public TimerHostService(ILogger<TimerHostService> logger)
+        public TimerHostService(ILogger<TimerHostService> logger, HostModel hostModel)
         {
             _logger = logger;
+            _hostModel = hostModel;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -29,6 +29,7 @@ namespace GrpcServerApp
 
             _logger.LogInformation(
                 "Timed Hosted Service is working. Count: {Count}", count);
+            _hostModel.Text = $"{DateTime.Now} - Счетчик: {count}";
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
