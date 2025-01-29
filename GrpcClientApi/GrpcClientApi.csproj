@@ -26,6 +26,10 @@
     <Protobuf Include="Protos\server.proto" GrpcServices="Client" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 
 
 

@@ -21,7 +21,7 @@ namespace GrpcServerApp.Services
             {
                 await responseStream.WriteAsync(new ResponseServerStream { Content = _hostModel.Text });
                 // для имитации работы делаем задержку в 3 секунду
-                await Task.Delay(TimeSpan.FromSeconds(3));
+                await Task.Delay(TimeSpan.FromSeconds(5));
             }
            
         }

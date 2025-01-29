@@ -1,5 +1,6 @@
 
 using GrpcClientApi.Hubs;
+using ServerStream;
 
 namespace GrpcClientApi
 {
@@ -16,11 +17,40 @@ namespace GrpcClientApi
                 o.Address = new Uri("http://localhost:5129");
             });
 
+            builder.Services.AddGrpcClient<MessengerServerStream.MessengerServerStreamClient>(o =>
+            {
+                o.Address = new Uri("http://localhost:5129");
+            });
+
             builder.Services.AddSignalR();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy(name: "CORSPolicy",
+            //        builder =>
+            //        {
+            //            builder.
+            //             AllowAnyMethod()
+            //            .AllowAnyHeader()
+            //            .AllowAnyOrigin();
+
+            //        });
+            //});
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ClientPermission", policy =>
+                {
+                    policy.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:9000", "https://localhost:9001")
+                        .AllowCredentials();
+                });
+            });
 
             var app = builder.Build();
 
@@ -38,7 +68,12 @@ namespace GrpcClientApi
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.MapHub<RealTimeHub>("/real");   // ChatHub будет обрабатывать запросы по пути /real
+            // Add CORS middleware before MVC
+            app.UseCors("ClientPermission");
+
+            
+
+            app.MapHub<RealTimeHub>("/realtime");   // ChatHub будет обрабатывать запросы по пути /real
 
             app.MapControllers();
 

@@ -19,10 +19,11 @@ namespace GrpcServerApp
 
             // Add services to the container.
             builder.Services.AddGrpc();
+            //builder.Services.AddSingleton<StreamingServer>();
 
             builder.Services.AddSingleton(new HostModel());
 
-            builder.Services.AddHostedService<MyHostedService>();
+            //builder.Services.AddHostedService<MyHostedService>();
             builder.Services.AddHostedService<TimerHostService>();
 
             var app = builder.Build();
